@@ -63,7 +63,7 @@ const sentimentItems = [
   { label: 'Critical', value: 'CRITICAL' }
 ]
 
-const { data, status, refresh } = await useAsyncData(
+const { data, status } = await useAsyncData(
   'comments',
   () => listComments({
     page: page.value,
@@ -93,6 +93,7 @@ const { data: statsData } = await useAsyncData(
 )
 
 // Edit / delete modal state.
+const importOpen = ref(false)
 const addOpen = ref(false)
 const editOpen = ref(false)
 const editComment = ref<Comment | null>(null)
@@ -115,12 +116,17 @@ const selectedIds = computed<string[]>(() =>
 )
 
 function onSaved() {
-  refresh()
+  refreshNuxtData(['comments', 'comments-stats'])
 }
 
 function onDeleted() {
   rowSelection.value = {}
-  refresh()
+  refreshNuxtData(['comments', 'comments-stats'])
+}
+
+// Import can also create new categories, so refresh the dropdown too.
+function onImported() {
+  refreshNuxtData(['comments', 'comments-stats', 'categories'])
 }
 
 const sentimentColor: Record<Sentiment, 'success' | 'warning' | 'error'> = {
@@ -240,6 +246,18 @@ const columns: TableColumn<Comment>[] = [
         </template>
 
         <template #right>
+          <CommentsImportModal
+            v-model:open="importOpen"
+            @imported="onImported"
+          >
+            <UButton
+              label="Import"
+              icon="i-lucide-file-up"
+              color="neutral"
+              variant="outline"
+            />
+          </CommentsImportModal>
+
           <CommentsBulkCopyModal
             :categories="categoryOptions"
             :default-category-id="categoryFilter"

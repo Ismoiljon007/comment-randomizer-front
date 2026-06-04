@@ -35,6 +35,19 @@ export interface CommentStats {
   total_categories: number
 }
 
+export interface ImportRowError {
+  row: number
+  message: string
+}
+
+export interface CommentImportResult {
+  total_rows: number
+  created_comments: number
+  created_categories: number
+  skipped: number
+  errors: ImportRowError[]
+}
+
 export interface Comment {
   id: string
   text: string

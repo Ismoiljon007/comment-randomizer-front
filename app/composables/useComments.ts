@@ -1,4 +1,4 @@
-import type { ApiResponse, Comment, CommentStats, Sentiment } from '~/types/api'
+import type { ApiResponse, Comment, CommentImportResult, CommentStats, Sentiment } from '~/types/api'
 
 export interface StatsQuery {
   categoryId?: string
@@ -27,6 +27,7 @@ export interface BulkCopyOptions {
 // `list` responses also carry a `pagination` block.
 export function useComments() {
   const { $api } = useNuxtApp()
+  const config = useRuntimeConfig()
 
   return {
     list: (query: CommentQuery = {}) =>
@@ -34,6 +35,16 @@ export function useComments() {
 
     stats: (query: StatsQuery = {}) =>
       $api<ApiResponse<CommentStats>>('/comments/stats', { query }),
+
+    // Full URL to the ready-to-fill .xlsx template (open it to download).
+    templateUrl: () => `${config.public.apiBase}/comments/upload/template`,
+
+    // Import comments from an .xlsx file (multipart/form-data, field name `file`).
+    upload: (file: File) => {
+      const form = new FormData()
+      form.append('file', file)
+      return $api<ApiResponse<CommentImportResult>>('/comments/upload', { method: 'POST', body: form })
+    },
 
     get: (id: string) =>
       $api<ApiResponse<Comment>>(`/comments/${id}`),
