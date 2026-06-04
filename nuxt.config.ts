@@ -14,8 +14,8 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      // Override at runtime with the NUXT_PUBLIC_API_BASE env var.
-      apiBase: 'https://comment-randomizer-back.vercel.app/api'
+      // Set via the NUXT_PUBLIC_API_BASE env var (see .env / .env.example).
+      apiBase: ''
     }
   },
 
