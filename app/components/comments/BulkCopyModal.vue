@@ -27,7 +27,7 @@ const sentimentItems = [
 const state = reactive({
   categoryId: 'all',
   sentiment: 'all',
-  limit: 1000,
+  limit: 500,
   random: true
 })
 
@@ -36,7 +36,7 @@ watch(open, (isOpen) => {
   if (!isOpen) return
   state.categoryId = props.defaultCategoryId ?? 'all'
   state.sentiment = props.defaultSentiment ?? 'all'
-  state.limit = 1000
+  state.limit = 500
   state.random = true
 })
 
@@ -60,7 +60,7 @@ async function onCopy() {
       icon: 'i-lucide-clipboard-check',
       color: 'success'
     })
-    open.value = false
+    // Modal ochiq qoladi — foydalanuvchi darrov yana random copy qila olishi uchun.
   } catch (error) {
     const apiError = (error as { data?: ApiError })?.data
     toast.add({

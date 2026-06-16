@@ -57,18 +57,21 @@ onMounted(async () => {
 <template>
   <UDashboardGroup unit="rem">
     <UDashboardSidebar
-      id="default"
+      id="default-wide"
       v-model:open="open"
       collapsible
       resizable
+      :min-size="16"
+      :default-size="18"
+      :max-size="24"
+      :collapsed-size="4.5"
       class="bg-elevated/25"
-      :ui="{ footer: 'lg:border-t lg:border-default' }"
+      :ui="{ footer: 'lg:border-t lg:border-default', header: 'w-full px-5' }"
     >
       <template #header="{ collapsed }">
         <NuxtLink
           to="/"
           class="flex items-center gap-2 font-semibold text-highlighted"
-          :class="collapsed ? 'justify-center' : 'px-1'"
         >
           <span class="inline-flex items-center justify-center size-8 rounded-lg bg-primary text-inverted shrink-0">
             <UIcon name="i-lucide-message-square-text" class="size-5" />
@@ -84,6 +87,10 @@ onMounted(async () => {
           orientation="vertical"
           tooltip
           popover
+          :ui="{
+            link: 'p-2.5 gap-2.5',
+            linkLeadingIcon: 'size-5'
+          }"
         />
       </template>
 
